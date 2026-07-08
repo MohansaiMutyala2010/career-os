@@ -1,5 +1,7 @@
+import Register from "./pages/Register";
+
 function app(){
-  return (<h1>Career Os Project</h1>);
+  return  <Register />;
 }
 
 export default app;
