@@ -6,17 +6,17 @@ import {
 
 export async function registerUser(req, res) {
   try {
-    const { full_name, email, password } = req.body;
+    const { fullName, email, password } = req.body;
 
     const errors = {};
 
     // Full Name
-    if (!full_name || full_name.trim() === "") {
-      errors.full_name = "Full name is required";
-    } else if (full_name.length < 3) {
-      errors.full_name = "Full name must be at least 3 characters";
-    } else if (full_name.length > 100) {
-      errors.full_name = "Full name must not exceed 100 characters";
+    if (!fullName || fullName.trim() === "") {
+      errors.fullName = "Full name is required";
+    } else if (fullName.length < 3) {
+      errors.fullName = "Full name must be at least 3 characters";
+    } else if (fullName.length > 100) {
+      errors.fullName = "Full name must not exceed 100 characters";
     }
 
     // Email
@@ -62,7 +62,7 @@ export async function registerUser(req, res) {
 
     // Save User
     const user = await createUser({
-      full_name,
+      full_name : fullName,
       email,
       password: hashedPassword,
     });

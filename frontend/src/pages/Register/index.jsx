@@ -1,3 +1,6 @@
+import React from "react";
+import { useState } from "react";
+
 import {
   FaRoute,
   FaRobot,
@@ -55,6 +58,108 @@ import Social from "../../components/SocialButton";
 import { SocialContainer } from "../../components/SocialButton/styledComponents";
 
 export default function Register() {
+
+  const [formData, setFormData] = useState({
+  fullName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+});
+
+const [showPassword, setShowPassword] = useState(false);
+
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+const [errors, setErrors] = useState({});
+
+
+const validateForm = () => {
+  const newErrors = {};
+
+  if (!formData.fullName.trim()) {
+    newErrors.fullName = "Full Name is required";
+  }
+
+  if (!formData.email.trim()) {
+    newErrors.email = "Email is required";
+  }
+
+  if (!formData.password) {
+    newErrors.password = "Password is required";
+  }
+
+  if (!formData.confirmPassword) {
+    newErrors.confirmPassword = "Confirm Password is required";
+  }
+
+  setErrors(newErrors);
+
+  return Object.keys(newErrors).length === 0;
+};
+
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  // validation
+
+const isValid = validateForm();
+
+  if (!isValid) {
+    return;
+  }
+
+
+
+  // API call
+ try {
+    const response = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(data.message);
+
+      // Clear the form
+      setFormData({
+        fullName: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+      });
+
+      setErrors({});
+
+      // Later we will navigate to Login page
+      // navigate("/login");
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    console.error("Registration Error:", error);
+    alert("Something went wrong. Please try again.");
+  }
+
+
+}; 
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+
+  setFormData((prevData) => ({
+    ...prevData,
+    [name]: value,
+  }));
+  console.log(e.target.value);
+};
+
   return (
     <RegisterContainer>
 
@@ -205,18 +310,24 @@ export default function Register() {
             Let's get you started
           </FormSubtitle>
 
-         <Form>
+         <Form  onSubmit={handleSubmit}>
 
   <Input
     label="Full Name"
     placeholder="Enter your full name"
     icon={<FaUser />}
+    name="fullName"
+  value={formData.fullName}
+  onChange={handleChange}
   />
 
   <Input
     label="Email Address"
     placeholder="Enter your email"
     icon={<FaEnvelope />}
+    name="email"
+  value={formData.email}
+  onChange={handleChange}
   />
 
   <Input
@@ -224,7 +335,12 @@ export default function Register() {
     type="password"
     placeholder="Create a password"
     icon={<FaLock />}
-    rightIcon={<FaEye />}
+    rightIcon={<FaEye onClick={() => setShowPassword(!showPassword)}
+  style={{ cursor: "pointer" }}/>}
+    type={showPassword ? "text" : "password"}
+  name="password"
+  value={formData.password}
+  onChange={handleChange}
   />
 
   <Input
@@ -232,7 +348,12 @@ export default function Register() {
     type="password"
     placeholder="Confirm your password"
     icon={<FaLock />}
-    rightIcon={<FaEye />}
+    rightIcon={<FaEye  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+  style={{ cursor: "pointer" }}/>}
+    type={showConfirmPassword  ? "text" : "password"}
+  name="confirmPassword"
+  value={formData.confirmPassword}
+  onChange={handleChange}
   />
 
   <CheckboxContainer>
