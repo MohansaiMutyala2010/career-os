@@ -1,6 +1,9 @@
 import React from "react";
 import { useState } from "react";
 
+
+import {useNavigate } from "react-router-dom";
+
 import {
   FaRoute,
   FaRobot,
@@ -57,7 +60,11 @@ import {
 import Social from "../../components/SocialButton";
 import { SocialContainer } from "../../components/SocialButton/styledComponents";
 
+
+
 export default function Register() {
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
   fullName: "",
@@ -395,7 +402,7 @@ const handleChange = (e) => {
 
 <LoginText>
   Already have an account?{" "}
-  <LoginLink>Login</LoginLink>
+  <LoginLink onClick={() => navigate("/login")}>Login</LoginLink>
 </LoginText>
 
 </Form>
