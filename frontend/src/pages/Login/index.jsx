@@ -6,6 +6,7 @@ const Login = () =>{
         <div>
             <h1>Welcome to Login Page of Career OS</h1>
             <p>Please Login the portal</p>
+            <p>create login</p>
         </div>
     );
 };
